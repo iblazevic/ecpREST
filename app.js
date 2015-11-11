@@ -4,7 +4,7 @@ var  SwaggerRestify = require('swagger-restify-mw'),
 	   restify = require('restify'),
 	   app = restify.createServer(),
 	   pg = require('pg'),
-     db = require('./../hello/api/db.js');
+     db = require(__dirname +'/api/db.js');
 
 module.exports = app; // for testing
  var anyone=[
@@ -51,6 +51,6 @@ SwaggerRestify.create(config, function(err, swaggerRestify) {
 
   swaggerRestify.register(app);
 
-  var port = process.env.PORT || 80;
+  var port = process.env.PORT || 3000;
   app.listen(port);
 });
