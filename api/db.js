@@ -18,8 +18,8 @@ db={
 				else{
 					return cb(false, false);
 				}
-        		client.end()
 			}
+			done();
 		});
 	},
 	loadAllMovies:function(user_id, cb){
@@ -32,7 +32,7 @@ db={
 			else{
 				return cb(r);
 			}
-        	client.end()
+			done();
 		});
 	},
 	loadMyMovies:function(user_id, cb){
@@ -57,7 +57,7 @@ db={
 			else{
 				return cb(r.rows[0])
 			}
-        	client.end()
+			done();
 			
 		});
 	},
@@ -72,7 +72,7 @@ db={
                 //client.query('insert into neuspjesni_login (lastcheck, ip) values(now()::TIMESTAMP WITHOUT TIME ZONE,$1)',[a]);
                 return cb(true)
             }
-        	client.end()
+			done();
         });
     },
     createUser: function(userData, cb){
@@ -85,7 +85,7 @@ db={
 			else{		
 				return cb(true);
 			}
-        	client.end()
+			done();
 		});
 	},
 	createMovie: function(data, cb){
@@ -103,7 +103,7 @@ db={
 					cb(r2.rows[0].currval)
 				});
 			}
-        	client.end()
+			done();
 		});
 	},
 	logIn:function(req, creds, callback){
@@ -121,13 +121,13 @@ db={
         			else{
 						callback(true, data)
         			}
-					client.end()
+			done();
         		})
             }
             else{
                 //client.query('insert into neuspjesni_login (lastcheck, ip) values(now()::TIMESTAMP WITHOUT TIME ZONE,$1)',[a]);
                 callback(false, false);
-            	client.end()
+			done();
             }
         });
     }
