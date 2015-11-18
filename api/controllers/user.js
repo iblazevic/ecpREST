@@ -6,7 +6,9 @@ module.exports = {
   checkLogin: checkLogin,
   logout    : logout,
   newUser   : newUser,
-  emailFree : emailFree
+  emailFree : emailFree,
+  checkMail : checkMail,
+  checkUsername : checkUsername
 };
 
 function checkLogin(req, res, cb){
@@ -36,7 +38,27 @@ function login(req, res, next) {
 function logout(req, res){
   res.json("Logged out");
 }
-
+function checkUsername(req, res){
+  console.log(req.swagger.params.username.value)
+  db.checkUsername(req.swagger.params.username.value, function(free){
+    if(free){
+      res.json({msg:'Username free to use'})
+    }
+    else{
+      res.json({msg:'Username already taken'})
+    }
+  })
+}
+function checkMail(req, res){
+  emailFree(req.swagger.params.email.value, function(free){
+    if(free){
+      res.json({msg:'Email free to use'})
+    }
+    else{
+      res.json({msg:'Email already registerd'})
+    }
+  })
+}
 function emailFree(email, cb){
   db.checkEmail(email, function(free){
     if(free){

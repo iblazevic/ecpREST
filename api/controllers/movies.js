@@ -35,17 +35,20 @@ function getSingle(req, res) {
 }
 
 function editSingle(req, res) {
-  var movId = req.swagger.params.movId.value,
-      props = req.swagger.params.props.value;
-  db.editMovie(movId,function(mov, detail){
-    res.json(mov, detail);
+  db.editMovie(req, function(success, msg){
+    if(success){
+      res.json({success:true, msg:msg});
+    }
+    else{
+      res.json({success:false, msg:msg});
+    }
   });
 }
 
 function create(req, res){
-  if(req.UserData.user_id){
+  if(req.user_id){
     props = req.swagger.params.props.value;
-    props.user_id = req.UserData.user_id;
+    props.user_id = req.user_id;
     db.createMovie(props, function(movId){
       db.getMovieDetails(movId, function(mov, detail){
         res.json(mov, detail);

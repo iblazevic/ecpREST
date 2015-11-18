@@ -10,7 +10,9 @@ module.exports = app; // for testing
  var anyone=[
   '/api/movies/all',
   '/api/user/create',
-  '/api/user/login'
+  '/api/user/login',
+  '/api/user/check_mail',
+  '/api/user/check_username'
 ];
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');

@@ -34,17 +34,9 @@ paths:
         schema:
           type: string
           example:
-            'asdasdasdasdasdasd'
+            'svasta'
   /user/login:
     x-swagger-router-controller: user
-    get:
-      description: check login
-      operationId: checkLogin
-      responses:
-        "200":
-          description: Success
-        default:
-          description: Error
     post:
       description: login route
       # used as the method name of the controller
@@ -65,7 +57,7 @@ paths:
   /user/create:
     x-swagger-router-controller: user
     post:
-      description: check login
+      description: create new user
       operationId: newUser
       responses:
         "200":
@@ -81,6 +73,41 @@ paths:
             username: username
             password: password
             email: email
+            
+  /user/check_mail:
+    x-swagger-router-controller: user
+    post:
+      description: check if email free
+      operationId: checkMail
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+      parameters:
+      - name: email
+        in: body
+        schema:
+          type: string
+          example: 'nomail@nomail.com'
+          
+  /user/check_username:
+    x-swagger-router-controller: user
+    post:
+      description: check if username free
+      operationId: checkUsername
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+      parameters:
+      - name: username
+        in: body
+        schema:
+          type: string
+          example: 'test'
+          
   /movies/all:
     # binds a127 app logic to a route
     x-swagger-router-controller: movies
@@ -163,8 +190,7 @@ paths:
           type: object
           example:
             name: LOTR
-            desc: Great one
-            actors: {1,2,3}
+            description: Great one
   /movies/new:
     x-swagger-router-controller: movies
     post:
