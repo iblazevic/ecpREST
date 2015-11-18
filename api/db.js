@@ -169,8 +169,9 @@ db={
         		})
             }
             else{
+            	client.end();
                 //client.query('insert into neuspjesni_login (lastcheck, ip) values(now()::TIMESTAMP WITHOUT TIME ZONE,$1)',[a]);
-                callback(false, false);
+                 return cb(false, false);
             }
         });
     },
