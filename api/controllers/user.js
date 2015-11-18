@@ -84,15 +84,15 @@ function newUser(req, res){
     if(free){
       db.createUser(userData, function(success){
         if(success){
-          res.json({msg:'Account created successfully, you can log in now'})
+          res.json({success:true, msg:'Account created successfully, you can log in now'})
         }
         else{
-          res.json({msg:'Something went wrong'})
+          res.json({success:false, msg:'Something went wrong'})
         }
       });
     }
     else{
-      res.json({msg:'Email already registered'});
+      res.json({success:false, msg:'Email already registered'});
     }
   })
 }
