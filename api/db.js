@@ -1,6 +1,6 @@
 var pg 		= require('pg'),
-	//connStr = 'postgres://uviluovygcqyek:iGc05LuhQZFOUApKsImha0VxfM@ec2-107-21-222-62.compute-1.amazonaws.com:5432/dejrltg6brj8el',
-	connStr = 'postgres://postgres:cinjok123@127.0.0.1:5434/plur_nova',
+	connStr = 'postgres://uviluovygcqyek:iGc05LuhQZFOUApKsImha0VxfM@ec2-107-21-222-62.compute-1.amazonaws.com:5432/dejrltg6brj8el',
+	//connStr = 'postgres://postgres:******@127.0.0.1:5434/plur_nova',
 	md5		= require('md5');
 
 db={

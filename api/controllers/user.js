@@ -80,7 +80,6 @@ function emailFree(email, cb){
 
 function newUser(req, res){
   var userData=JSON.parse(req.swagger.params.userData.value);
-  console.log(userData)
   emailFree(userData.email, function(free){
     if(free){
       db.createUser(userData, function(success){
