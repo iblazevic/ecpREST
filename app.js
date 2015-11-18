@@ -28,7 +28,6 @@ var allowCrossDomain = function(req, res, next) {
 };
 app.use(allowCrossDomain)
 app.use(function(req, res, next) {
-  console.log(req.headers['authorization']);
   db.checkToken(req.headers['authorization'] || '', function(success, user_id){
     if(success){
       req.user_id=user_id

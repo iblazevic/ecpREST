@@ -1,6 +1,6 @@
 var pg 		= require('pg'),
 	connStr = 'postgres://uviluovygcqyek:iGc05LuhQZFOUApKsImha0VxfM@ec2-107-21-222-62.compute-1.amazonaws.com:5432/dejrltg6brj8el',
-	//connStr = '',
+	//connStr = 'postgres://postgres:********@127.0.0.1:5434/plur_nova',
 	md5		= require('md5');
 
 db={
@@ -150,7 +150,7 @@ db={
       	
 	},
 
-	logIn:function(req, creds, cb){
+	logIn: function(req, creds, cb){
         var client = new pg.Client(connStr);
         client.connect();
         res=client.query('select username, user_id, email from users2 where username=$1 and password=$2 and active=1 limit 1',[creds.username, md5(creds.password)],function(err, result){
@@ -173,7 +173,20 @@ db={
                 callback(false, false);
             }
         });
-    }
+    },
+
+    logOut: function(req, cb){
+    	var client = new pg.Client(connStr);
+        client.connect();
+        client.query('update tokens set logged_out=1 where token=$1 and user_id=$2',[req.headers['authorization'] || '', req.user_id], function(e, r){
+        	if(e){
+        		return cb(false, e)
+        	}
+        	else{
+        		return cb(true, false)
+        	}
+        })
+	}
 
 }
 module.exports=db;

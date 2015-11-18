@@ -1,1 +1,1 @@
-# Skeleton project for Swagger
+# Movies app REST api for ECP
