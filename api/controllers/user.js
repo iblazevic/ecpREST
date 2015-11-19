@@ -36,15 +36,18 @@ function login(req, res, next) {
 }
 
 function logout(req, res){
-  db.logOut(req, function(success, error){
-    if(error){
-      res.json("Ooops!");
-    }
-    else{
-      res.json("Logged out");
-    }
+  db.logOut(req, function(error){
+    // da vratis standardno prvi error ako ga ima izgledalo bi
+    if (error) return res.json('Ooops!');
+    res.json('Logged out');
+    // if(error){
+    //   res.json("Ooops!");
+    // }
+    // else{
+    //   res.json("Logged out");
+    // }
   })
-  
+
 }
 function checkUsername(req, res){
   console.log(req.swagger.params.username.value)

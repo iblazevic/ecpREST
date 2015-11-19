@@ -4,32 +4,55 @@ var pg 		= require('pg'),
 	md5		= require('md5');
 
 db={
-	checkToken: function(token, cb){
-		var client = new pg.Client(connStr);
-		client.connect()
-		client.query('select user_id, token from tokens where token=$1 and logged_out=0',[token], function(e,r){
-			client.end();
-			if(e){
-				cb(false, false);
-				client.end()
-			}
-			else{
-				if(r.rows.length>0){
-					return cb(true, r.rows[0].user_id);
-				}
-				else{
-					return cb(false, false);
-				}
-			}
-		});
-	},
+	// checkToken: function(token, cb){
+	// 	var client = new pg.Client(connStr);
+      // connect je asinkrona akcija tako da u liniji ispod ne mos znat jel ti uspostavljena konekcija
+      // zato i ide callback funkcija
+	// 	client.connect()
+	// 	client.query('select user_id, token from tokens where token=$1 and logged_out=0',[token], function(e,r){
+	// 		client.end();
+	// 		if(e){
+          // standard je da je prvi argument u callbacku greska ako ga uopce ima
+          // sve radi na takav nacin, pa je mrvicu cudno okrenit da znaci success
+	// 			cb(false, false);
+	// 			client.end()
+	// 		}
+	// 		else{
+	// 			if(r.rows.length>0){
+	// 				return cb(true, r.rows[0].user_id);
+	// 			}
+	// 			else{
+	// 				return cb(false, false);
+	// 			}
+	// 		}
+	// 	});
+	// },
+
+  checkToken: function(token, cb) {
+    var client = new pg.Client(connStr);
+    client.connect(function(err) {
+      if (err) return cb(err);
+
+      var q = 'select user_id, token from tokens where token=$1 and logged_out=0';
+      client.query(q, [token], function(err, res) {
+        client.end();
+
+        // ako ovde ima return gotova je funkcija pa nema potrebe za else u ovakvim slucajevima
+        if (err) return cb(err);
+
+        // posto je standard da je prvi argument greska, onda za success se posalje null ili undefined
+        cb(null, res);
+
+      });
+    });
+  },
 	loadAllMovies:function(user_id, cb){
 		var client = new pg.Client(connStr);
 		client.connect()
 		client.query('select id, name, description as desc, case when user_id=$1 then 1 else 0 end as editable from movies',[user_id], function(e,r){
 			client.end()
 			if(e){
-
+        // nesto bi tribalo bit ovde? inace ce hangat aplikacija
 			}
 			else{
 				return cb(r);
@@ -59,7 +82,7 @@ db={
 			else{
 				return cb(r.rows[0])
 			}
-			
+
 		});
 	},
 	checkEmail:function(email, cb){
@@ -96,7 +119,7 @@ db={
 			if(e){
 				return cb(false);
 			}
-			else{		
+			else{
 				return cb(true);
 			}
 		});
@@ -147,7 +170,7 @@ db={
     	}
     })
 
-      	
+
 	},
 
 	logIn: function(req, creds, cb){
@@ -161,6 +184,7 @@ db={
         		res2 = client.query('insert into tokens (token, user_id, logged_out) values($1, $2, 0)', [data.token, data.user_id], function(err, res){
 					client.end();
         			if(err){
+                // puno bi ustedio koda i komplikacija drzeci se standarda da je prvi argument err
         				return cb(false, err)
         			}
         			else{
@@ -180,13 +204,16 @@ db={
     	var client = new pg.Client(connStr);
         client.connect();
         client.query('update tokens set logged_out=1 where token=$1 and user_id=$2',[req.headers['authorization'] || '', req.user_id], function(e, r){
-        	if(e){
-        		return cb(false, e)
-        	}
-        	else{
-        		return cb(true, false)
-        	}
-        })
+        	// if(e){
+        	// 	return cb(false, e)
+        	// }
+        	// else{
+        	// 	return cb(true, false)
+        	// }
+          if(e) return cb(false, e);
+
+          cb(true, false);
+        });
 	}
 
 }
